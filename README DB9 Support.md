@@ -4,7 +4,7 @@ This core is updated at the same rate as the official core, therefore, it preser
 
 For controlling everything with the UserIO Joysticks (including the OSD menu), is also needed to update the files: MiSTer and menu.rbf from the root of the SD card. The link to these files is here (download the latest release):
 
-MiSTer_Main:
+MiSTer_Main: 
 https://github.com/Miguel-T80c/Main_MiSTer/tree/master/releases
 
 Core Menu:
