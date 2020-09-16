@@ -2,7 +2,7 @@ A new option has been added in the OSD menu of this core called "UserIO Joystick
 
 This core is updated at the same rate as the official core, therefore, it preserves the same functionalities, and also adds the possibility of directly connecting DB9 and DB15 joysticks.
 
-For controlling everything with the UserIO Joysticks (including the OSD menu), is also needed to update the files: MiSTer and menu.rbf from the root of the SD card. The link to these files is here (download the latest release):
+For controlling everything with the UserIO Joysticks (including the OSD menu), is also needed to update the files: MiSTer and menu.rbf from the root of the SD card. The link to these files is here (download the latest release): 
 
 MiSTer_Main: 
 https://github.com/Miguel-T80c/Main_MiSTer/tree/master/releases
