@@ -36,8 +36,8 @@ module emu
 	output        CE_PIXEL,
 
 	//Video aspect ratio for HDMI. Most retro systems have ratio 4:3.
-	output  [7:0] VIDEO_ARX,
-	output  [7:0] VIDEO_ARY,
+	output [12:0] VIDEO_ARX,
+	output [12:0] VIDEO_ARY,
 
 	output  [7:0] VGA_R,
 	output  [7:0] VGA_G,
@@ -248,17 +248,25 @@ assign LED_DISK = 0;
 assign LED_POWER = 0;
 assign LED_USER = 0;
 assign BUTTONS = 0;
+wire [1:0] rotate        = status[3:2];
+wire       ar_43         = status[1];
+wire       half_size     = status[4];
+wire       is_rotated    = (rotate == 2'd1) || (rotate == 2'd3);
+wire       video_rotated = is_rotated;
+wire       rotate_ccw    = (rotate == 2'd3);
 
 //////////////////////////////////////////////////////////////////
 
-assign VIDEO_ARX = status[1] ? 8'd4 : 8'd16;
-assign VIDEO_ARY = status[1] ? 8'd3 : 8'd9;
+assign VIDEO_ARX = is_rotated ? (ar_43 ? 13'd3  : 13'd9 ) : (ar_43 ? 13'd4  : 13'd16);
+assign VIDEO_ARY = is_rotated ? (ar_43 ? 13'd4  : 13'd16) : (ar_43 ? 13'd3  : 13'd9 );
 
 `include "build_id.v"
 localparam CONF_STR = {
 	"EpochGalaxyII;;",
 	"-;",
 	"O1,Aspect ratio,original,4:3;",
+	"O[3:2],Screen Rotate,None,90,180,270;",
+	"O4,Screen Size,100%,50%;",
 	"-;",
 	"F,rom,Load File;", // remove
 	"-;",
@@ -306,6 +314,7 @@ hps_io #(.CONF_STR(CONF_STR)) hps_io
 	.buttons(buttons),
 	.status(status),
 	.status_menumask({status[5]}),
+	.video_rotated(video_rotated),
 
 	// [MiSTer-DB9 BEGIN] - DB9/SNAC8 support: joy_raw
 	.joy_raw(OSD_STATUS ? joy_raw_payload : 16'b0),
@@ -449,6 +458,8 @@ vfd vfd(
 
 video video(
 	.clk_vid(clk_vid),
+	.rotate(rotate),
+	.half_size(half_size),
 	.ce_pxl(CE_PIXEL),
 	.hsync(hsync),
 	.vsync(vsync),
